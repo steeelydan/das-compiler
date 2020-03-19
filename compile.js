@@ -24,10 +24,17 @@ class Tokenizer {
                     this.source = this.source
                         .substr(position + token.length)
                         .trim();
-                    console.log(token);
+                    console.log(new Token(key, token));
                 }
             });
         }
+    }
+}
+
+class Token {
+    constructor(type, value) {
+        this.type = type;
+        this.value = value;
     }
 }
 
