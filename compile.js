@@ -17,16 +17,18 @@ class Tokenizer {
     tokenize() {
         while (this.source.length) {
             this.tokenTypes.forEach((value, key) => {
-                const match = this.source.match(value);
-                if (match) {
-                    const token = match[0];
-                    const position = match.index;
-                    this.source = this.source
-                        .substr(position + token.length)
-                        .trim();
-                    console.log(new Token(key, token));
-                }
+                this.tokenizeSingleToken(key, value);
             });
+        }
+    }
+
+    tokenizeSingleToken(key, value) {
+        const match = this.source.match(value);
+        if (match) {
+            const token = match[0];
+            const position = match.index;
+            this.source = this.source.substr(position + token.length).trim();
+            console.log(new Token(key, token));
         }
     }
 }
