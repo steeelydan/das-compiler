@@ -1,1 +1,1 @@
-JS compiler, translated into JS from the Destroy All Software screencast: https://www.destroyallsoftware.com/screencasts/catalog/a-compiler-from-scratch
+Compiles a custom language into JS, translated into JS from the Destroy All Software screencast: https://www.destroyallsoftware.com/screencasts/catalog/a-compiler-from-scratch
