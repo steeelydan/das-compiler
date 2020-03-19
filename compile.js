@@ -7,9 +7,14 @@ const fs = require('fs');
 
 class Tokenizer {
     constructor() {
-        this.file = fs.readFileSync('test.src', {encoding: 'utf8'}).trim();
-        console.log(this.file);
+        this.source = fs.readFileSync('test.src', { encoding: 'utf8' }).trim();
+    }
+
+    tokenize() {
+        console.log(this.source);
     }
 }
 
-new Tokenizer();
+const tokenizer = new Tokenizer();
+
+tokenizer.tokenize();
