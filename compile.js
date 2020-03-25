@@ -1,42 +1,73 @@
 const fs = require('fs');
 
+class Token {
+    constructor(type, value) {
+        this.type = type;
+        this.value = value;
+    }
+}
+
 class Tokenizer {
     constructor() {
-        // Order is important!
-        this.tokenTypes = new Map();
-        this.tokenTypes.set('def', /^(\bdef\b)/);
-        this.tokenTypes.set('end', /^(\bend\b)/);
-        this.tokenTypes.set('identifier', /^(\b[a-zA-Z]+\b)/);
-        this.tokenTypes.set('integer', /^(\b[0-9]+\b)/);
-        this.tokenTypes.set('oparen', /^(\()/);
-        this.tokenTypes.set('cparen', /^(\))/);
+        // Order is relevant for token type discrimination & operator precedence
+        this.tokenTypes = [
+            { name: 'def', regex: /^(\bdef\b)/ },
+            { name: 'end', regex: /^(\bend\b)/ },
+            { name: 'identifier', regex: /^(\b[a-zA-Z]+\b)/ },
+            { name: 'integer', regex: /^(\b[0-9]+\b)/ },
+            { name: 'oparen', regex: /^(\()/ },
+            { name: 'cparen', regex: /^(\))/ }
+        ];
 
         this.source = fs.readFileSync('test.src', { encoding: 'utf8' }).trim();
     }
 
     tokenize() {
+        const tokens = [];
+
         while (this.source.length) {
-            this.tokenTypes.forEach((value, key) => {
-                this.tokenizeSingleToken(key, value);
-            });
+            let token = null;
+
+            this.source = this.source.trim(); // Ignore all whitespace
+
+            for (let i = 0; i < this.tokenTypes.length; i++) {
+                const name = this.tokenTypes[i].name;
+                const regex = this.tokenTypes[i].regex;
+                token = this.getValidToken(name, regex);
+                if (token) {
+                    tokens.push(token);
+                    break;
+                }
+            }
+
+            if (!token) {
+                throw this.tokenizeError();
+            }
         }
+        
+        console.log(tokens);
     }
 
-    tokenizeSingleToken(key, value) {
-        const match = this.source.match(value);
+    getValidToken(name, regex) {
+        const match = this.source.match(regex);
+        
         if (match) {
             const token = match[0];
             const position = match.index;
-            this.source = this.source.substr(position + token.length).trim();
-            console.log(new Token(key, token));
+            this.source = this.source.substr(position + token.length);
+
+            return new Token(name, token);
+        } else {
+            return null;
         }
     }
-}
 
-class Token {
-    constructor(type, value) {
-        this.type = type;
-        this.value = value;
+    tokenizeError() {
+        return (
+            "Couldn't match token at: " +
+            this.source.substr(0, 20) +
+            (this.source.length > 20 ? '...' : '')
+        );
     }
 }
 
