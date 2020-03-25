@@ -45,12 +45,12 @@ class Tokenizer {
             }
         }
         
-        console.log(tokens);
+        return tokens;
     }
 
     getValidToken(name, regex) {
         const match = this.source.match(regex);
-        
+
         if (match) {
             const token = match[0];
             const position = match.index;
@@ -71,6 +71,20 @@ class Tokenizer {
     }
 }
 
+class Parser {
+    constructor(tokens) {
+        this.tokens = tokens;
+    }
+
+    parse() {
+        console.log(this.tokens);
+    }
+}
+
 const tokenizer = new Tokenizer();
 
-tokenizer.tokenize();
+const tokens = tokenizer.tokenize();
+
+const parser = new Parser(tokens);
+
+parser.parse();
