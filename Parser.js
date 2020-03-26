@@ -47,9 +47,17 @@ class Parser {
 
     parseArgNames() {
         this.consume('oparen');
+        const argNames = [];
+        if (this.peek('identifier')) {
+            argNames.push(this.consume('identifier').value);
+            while (this.peek('comma')) {
+                this.consume('comma');
+                argNames.push(this.consume('identifier').value);
+            }
+        }
         this.consume('cparen');
 
-        return []; // For now
+        return argNames;
     }
 
     parseExpression() {
@@ -58,6 +66,10 @@ class Parser {
 
     parseInteger() {
         return new IntegerNode(this.consume('integer').value);
+    }
+
+    peek(expectedType) {
+        return this.tokens[0].type === expectedType;
     }
 }
 

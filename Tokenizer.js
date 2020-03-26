@@ -16,7 +16,8 @@ class Tokenizer {
             { name: 'identifier', regex: /^(\b[a-zA-Z]+\b)/ },
             { name: 'integer', regex: /^(\b[0-9]+\b)/ },
             { name: 'oparen', regex: /^(\()/ },
-            { name: 'cparen', regex: /^(\))/ }
+            { name: 'cparen', regex: /^(\))/ },
+            { name: 'comma', regex: /,/ }
         ];
 
         this.source = fs.readFileSync(fileName, { encoding: 'utf8' }).trim();
