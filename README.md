@@ -8,4 +8,4 @@ Compiles a custom language into JS. JS version of the Destroy All Software scree
 
 ## Run
 
-`node compile.js`
+`node index.js`

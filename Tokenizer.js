@@ -8,7 +8,7 @@ class Token {
 }
 
 class Tokenizer {
-    constructor() {
+    constructor(fileName) {
         // Order is relevant for token type discrimination & operator precedence
         this.tokenTypes = [
             { name: 'def', regex: /^(\bdef\b)/ },
@@ -19,7 +19,7 @@ class Tokenizer {
             { name: 'cparen', regex: /^(\))/ }
         ];
 
-        this.source = fs.readFileSync('test.src', { encoding: 'utf8' }).trim();
+        this.source = fs.readFileSync(fileName, { encoding: 'utf8' }).trim();
     }
 
     tokenize() {
@@ -71,73 +71,4 @@ class Tokenizer {
     }
 }
 
-class DefNode {
-    constructor(name, argNames, body) {
-        this.name = name;
-        this.argNames = argNames;
-        this.body = body;
-    }
-}
-
-class IntegerNode {
-    constructor(value) {
-        this.value = value;
-    }
-}
-
-class Parser {
-    constructor(tokens) {
-        this.tokens = tokens;
-    }
-
-    parse() {
-        const parseTree = this.parseDefinition();
-        console.log(parseTree);
-    }
-
-    consume(expectedType) {
-        const token = this.tokens.shift();
-        if (token.type === expectedType) {
-            return token;
-        } else {
-            throw 'Expected token type: ' +
-                expectedType +
-                ', but we got ' +
-                token.type +
-                '.';
-        }
-    }
-
-    parseDefinition() {
-        this.consume('def');
-        const name = this.consume('identifier').value;
-        const argNames = this.parseArgNames();
-        const body = this.parseExpression();
-        this.consume('end');
-
-        return new DefNode(name, argNames, body);
-    }
-
-    parseArgNames() {
-        this.consume('oparen');
-        this.consume('cparen');
-        
-        return []; // For now
-    }
-
-    parseExpression() {
-        return this.parseInteger();
-    }
-
-    parseInteger() {
-        return new IntegerNode(this.consume('integer').value);
-    }
-}
-
-const tokenizer = new Tokenizer();
-
-const tokens = tokenizer.tokenize();
-
-const parser = new Parser(tokens);
-
-parser.parse();
+module.exports = Tokenizer;
