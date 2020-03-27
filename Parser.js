@@ -38,7 +38,8 @@ class Parser {
                 expectedType +
                 ', but we got ' +
                 token.type +
-                '. At: ' + token.value;
+                '. At: ' +
+                token.value;
         }
     }
 
@@ -78,12 +79,29 @@ class Parser {
     parseInteger() {
         return new IntegerNode(this.consume('integer').value);
     }
+
     parseFunctionCall() {
         const name = this.consume('identifier').value;
-        this.consume('oparen');
-        const argExpressions = []; // For now
-        this.consume('cparen');
+        const argExpressions = this.parseArgExpressions();
         return new FunctionCallNode(name, argExpressions);
+    }
+
+    parseArgExpressions() {
+        const argExpressions = [];
+        
+        this.consume('oparen');
+        
+        if (!this.peek('cparen')) {
+            argExpressions.push(this.parseExpression());
+            while (this.peek('comma')) {
+                this.consume('comma');
+                argExpressions.push(this.parseExpression());
+            }
+        }
+
+        this.consume('cparen');
+
+        return argExpressions;
     }
 
     peek(expectedType) {
