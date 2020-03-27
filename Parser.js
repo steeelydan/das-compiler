@@ -38,7 +38,7 @@ class Parser {
                 expectedType +
                 ', but we got ' +
                 token.type +
-                '.';
+                '. At: ' + token.value;
         }
     }
 
