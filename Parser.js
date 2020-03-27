@@ -1,3 +1,5 @@
+const util = require('util');
+
 class DefNode {
     constructor(name, argNames, body) {
         this.name = name;
@@ -19,6 +21,12 @@ class FunctionCallNode {
     }
 }
 
+class VariableReferenceNode {
+    constructor(value) {
+        this.value = value;
+    }
+}
+
 class Parser {
     constructor(tokens) {
         this.tokens = tokens;
@@ -26,7 +34,7 @@ class Parser {
 
     parse() {
         const parseTree = this.parseDefinition();
-        console.log(parseTree);
+        console.log(util.inspect(parseTree, { depth: null }));
     }
 
     consume(expectedType) {
@@ -71,8 +79,10 @@ class Parser {
     parseExpression() {
         if (this.peek('integer')) {
             return this.parseInteger();
-        } else {
+        } else if (this.peek('identifier') && this.peek('oparen', 1)) {
             return this.parseFunctionCall();
+        } else {
+            return this.parseVariableReference();
         }
     }
 
@@ -88,9 +98,9 @@ class Parser {
 
     parseArgExpressions() {
         const argExpressions = [];
-        
+
         this.consume('oparen');
-        
+
         if (!this.peek('cparen')) {
             argExpressions.push(this.parseExpression());
             while (this.peek('comma')) {
@@ -104,8 +114,12 @@ class Parser {
         return argExpressions;
     }
 
-    peek(expectedType) {
-        return this.tokens[0].type === expectedType;
+    parseVariableReference() {
+        return new VariableReferenceNode(this.consume('identifier').value);
+    }
+
+    peek(expectedType, offset = 0) {
+        return this.tokens[0 + offset].type === expectedType;
     }
 }
 

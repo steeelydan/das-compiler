@@ -1,1 +1,1 @@
-def f(x,y,z) g(1, 2, 3) end
+def f(x,y,z) g(x,y,1) end
