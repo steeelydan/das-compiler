@@ -12,6 +12,13 @@ class IntegerNode {
     }
 }
 
+class FunctionCallNode {
+    constructor(name, argExpressions) {
+        this.name = name;
+        this.argExpressions = argExpressions;
+    }
+}
+
 class Parser {
     constructor(tokens) {
         this.tokens = tokens;
@@ -61,11 +68,22 @@ class Parser {
     }
 
     parseExpression() {
-        return this.parseInteger();
+        if (this.peek('integer')) {
+            return this.parseInteger();
+        } else {
+            return this.parseFunctionCall();
+        }
     }
 
     parseInteger() {
         return new IntegerNode(this.consume('integer').value);
+    }
+    parseFunctionCall() {
+        const name = this.consume('identifier').value;
+        this.consume('oparen');
+        const argExpressions = []; // For now
+        this.consume('cparen');
+        return new FunctionCallNode(name, argExpressions);
     }
 
     peek(expectedType) {
