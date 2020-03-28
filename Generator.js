@@ -5,10 +5,7 @@ class Generator {
                 const defFunctionName = node.name;
                 const defArgNames = node.argNames.join(', ');
                 const defReturnValue = this.generate(node.body);
-                console.log(
-                    `function ${defFunctionName}(${defArgNames}) { return ${defReturnValue} };`
-                );
-                break;
+                return `function ${defFunctionName}(${defArgNames}) { return ${defReturnValue} };`;
             case 'FunctionCallNode':
                 const callFunctionName = node.name;
                 const callArgNames = node.argExpressions

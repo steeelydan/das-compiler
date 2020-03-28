@@ -1,1 +1,1 @@
-def f(x,y,z) g(x,y,1) end
+def f(x, y) add(10, add(x, y)) end
