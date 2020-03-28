@@ -34,7 +34,7 @@ class Parser {
 
     parse() {
         const parseTree = this.parseDefinition();
-        console.log(util.inspect(parseTree, { depth: null }));
+        return parseTree;
     }
 
     consume(expectedType) {
