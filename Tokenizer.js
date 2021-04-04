@@ -8,7 +8,7 @@ class Token {
 }
 
 class Tokenizer {
-    constructor(fileName) {
+    constructor(src) {
         // Order is relevant for token type discrimination & operator precedence
         this.tokenTypes = [
             { name: 'def', regex: /^(\bdef\b)/ },
@@ -20,7 +20,7 @@ class Tokenizer {
             { name: 'comma', regex: /,/ }
         ];
 
-        this.source = fs.readFileSync(fileName, { encoding: 'utf8' }).trim();
+        this.source = src.trim();
     }
 
     tokenize() {
